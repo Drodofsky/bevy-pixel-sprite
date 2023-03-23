@@ -64,11 +64,12 @@ pub fn update_sprites(
     red: Res<Red>,
     mut images: ResMut<Assets<Image>>,
 ) {
-    let mut texture = vec![255u8; 10 * 10 * 4];
-    for (i, c) in texture.iter_mut().enumerate() {
-        if i % 4 == 0 {
-            *c = red.get();
-        }
+    let mut texture = vec![0u8; 10 * 10 * 4];
+    for r in texture.iter_mut().step_by(4) {
+        *r = red.get();
+    }
+    for a in texture.iter_mut().skip(3).step_by(4) {
+        *a = 255;
     }
 
     for mut sprite in sprite_query.iter_mut() {
@@ -82,7 +83,10 @@ pub fn spawn_sprite(
     mut images: ResMut<Assets<Image>>,
 ) {
     if let Ok(window) = window_query.get_single() {
-        let rgba_data = vec![255u8; 10 * 10 * 4];
+        let mut rgba_data = vec![0u8; 10 * 10 * 4];
+        for a in rgba_data.iter_mut().skip(3).step_by(4) {
+            *a = 255;
+        }
         let texture_handle = create_texture(10, 10, rgba_data, &mut images);
 
         let sprite = SpriteBundle {
