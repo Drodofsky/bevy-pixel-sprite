@@ -10,8 +10,8 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .init_resource::<Red>()
-        .add_startup_systems((spawn_camera, spawn_sprite))
-        .add_systems((update_red, update_sprites).chain())
+        .add_systems(Startup, (spawn_camera, spawn_sprite))
+        .add_systems(Update, (update_red, update_sprites).chain())
         .run();
 }
 
